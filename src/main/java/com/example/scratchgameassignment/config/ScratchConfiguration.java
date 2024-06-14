@@ -28,7 +28,14 @@ public class ScratchConfiguration {
     @Bean
     public ConfigurationProperties configurationProperties(ObjectMapper objectMapper, ResourceLoader resourceLoader) throws IOException {
         var resource = resourceLoader.getResource(configPath);
-        return objectMapper.readValue(resource.getInputStream(), ConfigurationProperties.class);
+        var properties = objectMapper.readValue(resource.getInputStream(), ConfigurationProperties.class);
+        if (properties.getRows()==0) {
+            properties.setRows(3);
+        }
+        if (properties.getColumns()==0) {
+            properties.setColumns(3);
+        }
+        return properties;
     }
 
     @Bean
