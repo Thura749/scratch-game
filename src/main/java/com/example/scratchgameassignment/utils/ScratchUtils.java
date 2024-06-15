@@ -1,11 +1,8 @@
 package com.example.scratchgameassignment.utils;
 
-import com.example.scratchgameassignment.config.ConfigurationProperties;
 import com.example.scratchgameassignment.model.MatchIndex;
 import com.example.scratchgameassignment.model.MatchedSymbol;
-import com.example.scratchgameassignment.model.SymbolDto;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,9 +14,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ScratchUtils {
     private static final Random RANDOM = new Random();
     private static boolean isBonusPicked = false;
-    private final ConfigurationProperties properties;
+    private final ConfigurationUtils configurationUtils;
 
     public String[][] generateScratch() {
+        var properties = configurationUtils.getProperties();
         int rows = properties.getRows();
         int columns = properties.getColumns();
         var symbolList = new ArrayList<>(properties.getSymbols().keySet()
@@ -36,6 +34,7 @@ public class ScratchUtils {
     }
 
     private int getRandomNumber(List<String> symbols) {
+        var properties = configurationUtils.getProperties();
         var symbolDetails = properties.getSymbols();
         int number = RANDOM.nextInt(symbols.size());
         var details = symbolDetails.get(symbols.get(number));
@@ -49,6 +48,7 @@ public class ScratchUtils {
     }
 
     public List<MatchedSymbol> findMatches(String[][] matrix) {
+        var properties = configurationUtils.getProperties();
         var symbols = properties.getSymbols();
         List<MatchedSymbol> matchers = new ArrayList<>();
         AtomicBoolean standardMatched = new AtomicBoolean(false);
