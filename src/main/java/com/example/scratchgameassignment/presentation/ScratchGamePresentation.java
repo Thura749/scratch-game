@@ -1,6 +1,7 @@
 package com.example.scratchgameassignment.presentation;
 
 import com.example.scratchgameassignment.business.ScratchService;
+import com.example.scratchgameassignment.model.ScratchResponse;
 import com.example.scratchgameassignment.utils.ConfigurationUtils;
 import com.example.scratchgameassignment.utils.ArgumentUtil;
 import dnl.utils.text.table.TextTable;
@@ -28,19 +29,22 @@ public class ScratchGamePresentation implements CommandLineRunner {
                 String inputString = ArgumentUtil.getArgumentValue("--betting-amount", args);
                 Double betAmount = Double.parseDouble(inputString);
                 var response = service.execute(betAmount);
-                var output = new Object[1][2];
-                output[0][0] = betAmount;
-                output[0][1] = response;
-                TextTable table = new TextTable(new String[]{"Input", "Output"}, output);
-                table.printTable();
+                pintOutput(betAmount, response);
             } catch (NumberFormatException e) {
                 System.err.println("Betting Amount Should be Number!");
             } catch (NullPointerException e) {
-                System.out.println(e.getMessage());
                 System.err.println("betting-amount is mandatory");
             } catch (IOException e) {
                 System.err.println("Config File Path Not Found");
             }
         }
+    }
+
+    private void pintOutput(Double betAmount, ScratchResponse result) {
+        var output = new Object[1][2];
+        output[0][0] = betAmount;
+        output[0][1] = result;
+        TextTable table = new TextTable(new String[]{"Input", "Output"}, output);
+        table.printTable();
     }
 }
